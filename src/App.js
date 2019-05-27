@@ -1,23 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import NameTag from "./component/NameTag";
 
+// higer order function means takes a funciton and returns a function
+// higerorder component is also the same way.    
+const makeEverythingGreen = BaseComponent => props => {
+  const addThis = {
+    style: {
+      color: "green"
+    }
+  };
+
+  const newProps = {
+    ...props,
+    ...addThis
+  };
+
+  return <BaseComponent {...newProps} />;
+};
+
+const removeInlineStyles = BaseComponent => props => {
+  const newProps = { ...props };
+  delete newProps.style;
+
+  return <BaseComponent {...newProps} />;
+};
+
+const GreenNameTag = makeEverythingGreen(NameTag);
+const CleanNameTag = removeInlineStyles(NameTag);
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <GreenNameTag firstName="john" lastName="johnson" />
+        <CleanNameTag
+          firstName="peter"
+          lastName="peterson"
+          style={{ color: "red" }}
+        />
+        <NameTag firstName="jill" lastName="jillson" style={{ color: "red" }} />
       </header>
     </div>
   );
